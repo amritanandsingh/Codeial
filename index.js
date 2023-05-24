@@ -8,10 +8,19 @@ const db = require('./config/mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
+const passportJWT = require('./config/passport-jwt-strategy');
+ 
+const passportGoogle = require('./config/passport-google-oauth2-strategy');
+
 const MongoStore = require('connect-mongo')(session);
-//const sassMiddleware =require('node-sass-middleware');
+//const sassMiddleware = require('node-sass-middleware');
 const flash = require('connect-flash');
 const customMware = require('./config/middleware');
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
 /*
 app.use(sassMiddleware({
     src: './assets/scss',
@@ -26,6 +35,8 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 
 app.use(express.static('./assets'));
+// make the uploads path available to the browser
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.use(expressLayouts);
 // extract style and scripts from sub pages into the layout
@@ -63,9 +74,12 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use(passport.setAuthenticatedUser);
-app.use(flash());  
+
+app.use(flash());
 app.use(customMware.setFlash);
+
 // use express router
 app.use('/', require('./routes'));
 

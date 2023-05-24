@@ -10,18 +10,19 @@ passport.use(new LocalStrategy({
         usernameField: 'email',
         passReqToCallback: true
     },
-    function(req ,email, password, done){
+    function(req, email, password, done){
         // find a user and establish the identity
         User.findOne({email: email}, function(err, user)  {
             if (err){
-                req.flash('error',err); 
+                req.flash('error', err);
                 return done(err);
             }
 
             if (!user || user.password != password){
-                req.flash('error','invalid Username/Password'); 
+                req.flash('error', 'Invalid Username/Password');
                 return done(null, false);
             }
+
             return done(null, user);
         });
     }
