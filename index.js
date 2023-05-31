@@ -17,10 +17,18 @@ const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 const customMware = require('./config/middleware');
 
+// setup chat server to be used with socket io
+const chatServer = require('http').Server(app);
+const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
+chatServer.listen(5001);
+console.log("chat server is lisening on port 5000");
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({
     extended: false
 }))
+
+
 /*
 app.use(sassMiddleware({
     src: './assets/scss',
